@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+import argparse
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("word")
+    args = ap.parse_args()
+
+    response = urlopen(f"https://pl.bab.la/slownik/angielski-polski/{args.word}")
+    soup = BeautifulSoup(response, "lxml")
+    for element in soup.select("div#translationsdetails1 div.dict-result a strong"):
+        if "sound" in str(element):
+            continue
+        print(list(element.children)[0])
