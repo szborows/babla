@@ -2,16 +2,23 @@
 
 import argparse
 from urllib.request import urlopen
+from urllib.parse import quote_plus
 from bs4 import BeautifulSoup
+import sys
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("word")
     args = ap.parse_args()
 
-    response = urlopen(f"https://pl.bab.la/slownik/angielski-polski/{args.word}")
+    response = urlopen(f"https://pl.bab.la/slownik/angielski-polski/{quote_plus(args.word)}")
     soup = BeautifulSoup(response, "lxml")
+    translations_found = False
     for element in soup.select("div#translationsdetails1 div.dict-result a strong"):
         if "sound" in str(element):
             continue
         print(list(element.children)[0])
+        translations_found = True
+
+    if not translations_found:
+        sys.exit(1)
