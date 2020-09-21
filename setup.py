@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="babla",
-    version="0.1.1",
+    version="0.1.2",
     author="Sławomir Zborowski",
     author_email="slawomir.zborowski@nokia.com",
     url='https://github.com/szborows/babla',

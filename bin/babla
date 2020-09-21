@@ -13,12 +13,19 @@ if __name__ == "__main__":
 
     response = urlopen(f"https://pl.bab.la/slownik/angielski-polski/{quote_plus(args.word)}")
     soup = BeautifulSoup(response, "lxml")
-    translations_found = False
-    for element in soup.select("div#translationsdetails1 div.dict-result a strong"):
-        if "sound" in str(element):
-            continue
-        print(list(element.children)[0])
-        translations_found = True
 
-    if not translations_found:
+    translations = []
+
+    try:
+        content_container = soup.findAll("div", attrs={"class": "quick-results container"})[0]
+        for ul in content_container.findAll("ul", attrs={"class": "sense-group-results"}):
+            for a in ul.findAll("a"):
+                translations.append(a.text)
+    except IndexError:
+        print("uhh")
+
+    if not translations:
         sys.exit(1)
+
+    for t in translations:
+        print(t)
